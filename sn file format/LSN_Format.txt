@@ -1,0 +1,22 @@
+NAME
+       LSN_format   - file formats of the LSN (low-level net)
+
+Grammar:
+
+         .lsn              ::= <pl><tr><arc><token>*<at>*
+          pl               ::= m
+          tr                ::= n
+         arc               ::= k
+         token           ::=mu
+         at                 ::= v1 v2 w
+           
+Notes:
+      'm' is number of places,
+      'n' is number of transitions, 
+      'k' is number of arcs,
+      'mu' is token of each place,
+      'at' is arc type:
+     	 1) If v1 < 0, v2 < 0, arc from transition v1 to transition v2. It is a priority arc with w = 0.
+     	 2) If v1 > 0, v2 > 0, arc from place v1 to transition v2 of multiplicity w.
+     	 3) If v1 < 0, v2 > 0, arc from transition v2 to place |v1| of multiplicity w.
+     	 4) When w is negative, it is inhibitor arc.

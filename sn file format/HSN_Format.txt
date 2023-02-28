@@ -1,0 +1,21 @@
+NAME
+       HSN_format   - file formats of the HSN (high-level net)
+
+Grammar:
+	
+      .hsn       ::= <lsn><tnsub>(<trssub><plsmap>*)*
+      tnsub     ::= tnum
+      trssub    ::= ht np <subnet>
+      plsmap  ::= hp  lp
+
+Notes:
+       <lsn> is low-level net specification according to .lsn,
+       'tnum' is total number of substituted transitions
+       'ht' is high-level transition number, 'np' is number of place mappings,<subnet> is low-level net file name. 
+       'hp' is high-level place number, 
+       'lp' is low-level place number,
+	1) If hp > 0, lp > 0, data input place mapping,
+	2) If hp > 0, lp < 0, data output place mapping, 
+	3) If hp < 0, lp > 0, start-control-ﬂow place mapping, 
+	4) If hp < 0, lp < 0, finish-control-ﬂow place mapping.
+      

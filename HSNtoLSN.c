@@ -1,10 +1,20 @@
-// Command line:HSNtoLSN hsn_file.txt result_lsn_file.txt
+///////////////////////////////// HSN to LSN //////////////////////////////////////////////////////
+//  Compiler and linker of Sleptsov net program.                                                 //
+//  To complete the conversion from high-level Sleptsov net (HSN) to low-level Sleptsov net (LSN)//
+//  @ 2023 Hongfei Zhao												                             //
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Command line:  HSNtoLSN hsn_file.txt result_lsn_file.txt
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <sys/time.h>
+#define MAXSTRLEN 255
+
+#define SKIP_COMM do{fgets(input_buffer,MAXSTRLEN,f);} while(input_buffer[0]==';') ;//skip comments
+#define MAX_NUM 7000
 /**
 程序使用说明：用户可通过输入“-h”获取程序使用说明，按照程序用法及输入/输出的格式要求，正确使用程序
 
@@ -56,6 +66,7 @@ struct lsn { //structure of low-level sleptsov net
 	int m;  //number of places
 	int n;  //number of transitions
 	int k;	//number of arcs
+	int l;  //number of nonzero markings
 	int *mu; //marking
 	struct arc *a; //arcs
 };
@@ -122,7 +133,7 @@ and the structure storing each LSN: struct lsn *l_nt.
 **/
 struct net_table { //structure of net table
 	int file_n; //number of file
-	char filename[50][50]; //record file name
+	char filename[7000][20]; //record file name
 	struct lsn *l_nt;
 };
 
@@ -211,17 +222,16 @@ Write HSN information function: including: write LSN part and transition substit
 int write_hsn(struct hsn *h,FILE *f); //write hsn into a file
 
 /**
-读取LSN文件函数：利用文件指针获取文件第一行的m，n，k数值，存入结构体变量l中。根据place数量m为mu分配
-内存空间，逐个读取第二行的mu值存入结构体变量l中。根据弧的数量k为弧的结构体变量分配内存空间，
-逐行读取弧的信息存入结构体变量l中。
+读取LSN文件函数：利用文件指针获取文件第一行的m，n，k,l,nst数值，存入结构体变量l和h中。根据place数量m为mu分配
+内存空间，根据弧的数量k为弧的结构体变量分配内存空间，逐行读取弧的信息存入结构体变量l中。再为mu的每个元素赋值 
 
-Read LSN file function: use the file pointer to obtain the m, n, and k values of the first line of
-the file, and store them in the structure variable l. Allocate mu according to the number of places m
-Memory space, read the mu value of the second line one by one and store it in the structure variable l.
+Read LSN file function: use the file pointer to obtain the m, n, k，l,nst values of the first line of
+the file, and store them in the structure variable l and h. Allocate mu according to the number of places m
+Memory space, 
 Allocate memory space for arc structure variables according to the number of arcs k,
 The information of the arc read line by line is stored in the structure variable l.
 **/
-int read_lsn(struct lsn * l, FILE *f); //read a lsn file
+int read_lsn(struct lsn * l,int *nst, FILE *f); //read a lsn file
 
 /**
 写LSN文件函数：根据LSN文件要求的格式，利用文件指针从结构体变量中获取m，n，k数值，并写出至文件中。
@@ -282,7 +292,7 @@ void cm_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *mt
                  int *add_io, int *addo,int *a_p_total, int p_n,int *add_cf, int *add_cf_o,int *cf_num,int *cf_n_in,int *c_m_cf,int *cf_in);
 //clean_move模块变迁映射函数
 void cm_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,struct net_table *nt,int *a_t_total);
- 
+
 int main (int argc,char *argv[]) {
 
 	double time1,time2;
@@ -304,8 +314,8 @@ int main (int argc,char *argv[]) {
 	}
 	read_hsn(&h, f1);
 	fclose (f1);
-
 	create_net_table(&h,&nt);
+	
 	create_mapping_result(&mt,&nt,&h);
 
 	f2 = fopen(argv[2], "w" );
@@ -343,17 +353,19 @@ int create_net_table(struct hsn *h,struct net_table *nt) {
 	/******read lsn into structure*******/
 	nt->l_nt=malloc((nt->file_n)*sizeof(struct lsn));
 
-	FILE *f3;
+	FILE *f3; //将所需lsn读入内存 
+	int temp;
 	for(i=1; i<nt->file_n; i++) {
 		f3 = fopen(nt->filename[i], "r" );
 		if(f3==NULL) {
 			printf( "Cannot open %s file\n" ,nt->filename[i]);
 			return -1;
 		}
-		read_lsn(&(nt->l_nt[i-1]),f3); 
+		read_lsn(&(nt->l_nt[i-1]),&temp,f3);
 		fclose(f3);
 	}
 	/*************************************/
+
 	return 0;
 }
 
@@ -433,7 +445,7 @@ void copy_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *
                    int *split,int *sp_in,int *joint,int *jo_in,int *a_p_total,int p_n,int *add_io,int *addo) {
 
 	int j,b;
-	for(j=0; j<nt->l_nt[a].m; j++) { 
+	for(j=0; j<nt->l_nt[a].m; j++) {
 		mt->pn[*p_total].pre_p=j+1; //number of previous places
 		if(mt->pn[*p_total].pre_p==1) { //input place
 			mt->pn[*p_total].new_p=h->t[i].pm1[p_n].hp; //use hsn place number
@@ -639,43 +651,46 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 	int a=0;//intermediate variable
 	int b;//intermediate variable
 
-	int add_io[20];//record subsitituted net input/output places array index. (P1,P2,P3 of add_lsn)
+	int add_io[MAX_NUM];//record subsitituted net input/output places array index. (P1,P2,P3 of add_lsn)
 	int addi=0;
 	int addo=0; //i:record index. o:use index
-	int add_cf[20];//record subsitituted net control flow places array index (P4,P5 of add_lsn)
+	int add_cf[MAX_NUM];//record subsitituted net control flow places array index (P4,P5 of add_lsn)
 	int add_cf_i=0;
 	int add_cf_o=0; //i:record index. o:use index
 
-	int split[20]; //record copy net place array index. split[]:places connect with split transition.
+	int split[MAX_NUM]; //record copy net place array index. split[]:places connect with split transition.
 	int sp_in=0,sp_out=0; //in:record index. out:use index
 
-	int	joint[20]; //record copy net place array index. joint[]: places connect with joint transition
+	int	joint[MAX_NUM]; //record copy net place array index. joint[]: places connect with joint transition
 	int jo_in=0,jo_out=0; //in:record index. out:use index
 
-	int t_split[20]; //record transition array index
+	int t_split[MAX_NUM]; //record transition array index
 	int	t_sp_in=0,t_sp_out=0;  //in:record index. out:use index
 
-	int c_m_cf[10]; //record clean_move control flow places array index
+	int c_m_cf[MAX_NUM]; //record clean_move control flow places array index
 	int cf_in=0,cf_out=0; //in:record index. out:use index
 
-	int cf_num[10]; //record number of control flow place
+	int cf_num[MAX_NUM]; //record number of control flow place
 	int cf_n_in=0,cf_n_out=0; //in:record index. out:use index
 
 	int p_n;//place mapping number
 	int copy_count;//to add split and joint transitions
 	int sp_count; //to add split  transitions
 	int jo_count;//to add joint transitions
+
 	for(i=0; i<h->nst; i++) {
 		/*********subsititute net**********/
 		/*************places mapping****************/
 		//子网的库所映射函数
+
 		sub_pmapping(i, a, &start_p, &p_total, mt, nt, h, add_io, &addi, add_cf, &add_cf_i, &a_p_total);
+	
 		/*************transitions mapping****************/
 		sub_tmapping(i, a, &start_t, &t_total, mt, nt, h, &a_t_total);
 		a++;
 
 		copy_count=0;
-		for(p_n=0; p_n<h->t[i].pmnum; p_n++) { 
+		for(p_n=0; p_n<h->t[i].pmnum; p_n++) {
 			/*********copy_lsn**********/
 			if((h->t[i].pm1[p_n].hp)>0&&(h->t[i].pm1[p_n].lp)>0) { //copy_lsn
 				copy_count++;
@@ -710,7 +725,7 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 					start_t++;
 					//add joint transition
 					//与替代子网的输入控制库所相连的常规弧
-					mt->new_a[a_p_total+0].p=mt->pn[add_cf[add_cf_o++]].new_p;   
+					mt->new_a[a_p_total+0].p=mt->pn[add_cf[add_cf_o++]].new_p;
 					mt->new_a[a_t_total+0].t=mt->tn[t_total].new_t;
 					mt->new_a[a_p_total+0].w=1;
 					a_p_total+=1;
@@ -767,6 +782,7 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		}
 
 	}
+	
 	//不需要替代的变迁，由HSN传递至LSN
 	for(i=0; i<(h->l->k); i++) {
 		for(j=0; j<(h->nst); j++) {
@@ -803,9 +819,16 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		printf("***error: no enough memory for result marking\n");
 		exit(2);
 	}
+	
+	//记录非0库所总数
+	int noneZero=0; 
 	for(i=0; i<start_p-1; i++) {
 		mt->l_result->mu[i]=mt->mark[i];
+		if(mt->mark[i]!=0){
+			noneZero++;
+		}
 	}
+	mt->l_result->l=noneZero;
 
 	mt->l_result->a = malloc( (mt->l_result->k)*sizeof(struct arc) ); // arcs
 	if((mt->l_result->a)==NULL) {
@@ -822,20 +845,22 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 //read hsn
 int read_hsn(struct hsn *h,FILE *f) {
 	int i;
+	
 	h->l=malloc(sizeof(struct lsn));
-	read_lsn((h->l),f);
-	fscanf(f,"%d", &(h->nst));
+	read_lsn((h->l),&(h->nst),f);
+	
 	h->t=malloc((h->nst)*sizeof(struct tspm));
 	for(i=0; i<h->nst; i++) {
 		read_ts(&(h->t[i]),f);
 	}
+	
 	return 0;
 }
 //write hsn
 int write_hsn(struct hsn *h,FILE *f) {
 	int i;
 	write_lsn((h->l),f);
-	fprintf(f,"%d\n", (h->nst));
+	//fprintf(f,"%d\n", (h->nst));
 	for(i=0; i<h->nst; i++) {
 		write_ts(&(h->t[i]),f);
 	}
@@ -845,7 +870,9 @@ int write_hsn(struct hsn *h,FILE *f) {
 //read transition subsititution part of hsn
 int read_ts(struct tspm * tm, FILE *f) { //read lsn
 	int i;
-	fscanf(f,"%d %d %s", &(tm->tnum),&(tm->pmnum),&(tm->name));
+	char input_buffer[255];
+	SKIP_COMM
+	sscanf(input_buffer,"%d %d %s", &(tm->tnum),&(tm->pmnum),&(tm->name));
 
 	tm->pm1 = malloc((tm->pmnum)*sizeof(struct pm));
 	if((tm->pm1)==NULL) {
@@ -853,7 +880,8 @@ int read_ts(struct tspm * tm, FILE *f) { //read lsn
 		exit(2);
 	}
 	for(i=0; i< tm->pmnum; i++) {
-		fscanf(f,"%d %d",&(tm->pm1[i].hp),&(tm->pm1[i].lp));
+		SKIP_COMM
+		sscanf(input_buffer,"%d %d",&(tm->pm1[i].hp),&(tm->pm1[i].lp));
 	}
 	return 0;
 }
@@ -908,53 +936,71 @@ int duplicate_check(int p1,int t1,int p2,int t2) {
 	}
 }
 //read lsn
-int read_lsn(struct lsn * l, FILE *f) { //read lsn
+int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
 	int i,j;
-
-	fscanf(f, "%d %d %d", &(l->m), &(l->n), &(l->k));
+	char input_buffer[255];
+	SKIP_COMM
+	sscanf(input_buffer, "%d %d %d %d %d", &(l->m), &(l->n), &(l->k), &(l->l), nst);
 	header_check_err((l->m), (l->n), (l->k));
-
-	l->mu = malloc( (l->m)*sizeof(int) ); // marking
-	if((l->mu)==NULL) {
-		printf("***error: no enough memory for l->mu\n");
-		exit(2);
-	}
-
-	for(i=0; i < l->m; i++) {
-		fscanf(f, "%d ", &(l->mu[i]));
-	}
-
+	
 	l->a = malloc( (l->k)*sizeof(struct arc) ); // arcs
 	if((l->a)==NULL) {
 		printf("***error: no enough memory for l->a\n");
 		exit(2);
 	}
 	for(i=0; i < (l->k); i++) { // read arcs
-
-		fscanf(f, "%d %d %d", &(l->a[i].p), &(l->a[i].t), &(l->a[i].w) );
+		SKIP_COMM
+		sscanf(input_buffer, "%d %d %d", &(l->a[i].p), &(l->a[i].t), &(l->a[i].w) );
 		arc_check_err((l->a[i].p), (l->a[i].t), (l->a[i].w),(l->m), (l->n), (l->k));
 		for(j = 0; j < i; j++) {
 			duplicate_check(l->a[i].p,l->a[i].t,l->a[j].p,l->a[j].t);
 		}
 	}
+	
+	l->mu = malloc( (l->m)*sizeof(int) ); // marking
+	if((l->mu)==NULL) {
+		printf("***error: no enough memory for l->mu\n");
+		exit(2);
+	}
+	
+	//set all markings zero  先将token全置为0 
+	for(i=0; i < l->m; i++) {
+		l->mu[i]=0;
+	}
+	//set none zero markings  赋值非0token 
+	int pnum,marking;//非0库所的编号和token数 
+	for(i=0; i < (l->l); i++) {
+		SKIP_COMM
+		sscanf(input_buffer, "%d %d", &pnum,&marking );
+		l->mu[pnum-1]=marking;
+	}
+	
 	return 0;
 }
 
 // write lsn from memory into a .txt file;
 int write_lsn(struct lsn * l, FILE *f) {
 	int i;
+	
+	fprintf(f,";m n k l nst\n") ;
+	fprintf(f, "%d %d %d %d 0\n", (l->m), (l->n), (l->k), (l->l));
 
-	fprintf(f, "%d %d %d\n", (l->m), (l->n), (l->k));
-
-	for(i=0; i < l->m; i++) {
-		fprintf(f, "%d ", l->mu[i]);
-	}
-	fprintf(f,"\n");
-
+	fprintf(f,";arcs\n") ;
+	//arcs
 	for(i=0; i < l->k; i++) {
 		fprintf(f, "%d %d %d\n", l->a[i].p, l->a[i].t, l->a[i].w);
+	}
+
+	
+	fprintf(f,"; mu(p):\n") ;
+	//非0库所编号及token数 
+	for(i=0; i < l->m; i++) {
+		if(l->mu[i]!=0) {
+			fprintf(f, "%d %d\n", i+1, l->mu[i]);
+		}
 	}
 
 	return 0;
 }
 
+//  @ 2023 Hongfei Zhao	

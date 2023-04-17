@@ -3,14 +3,12 @@ NAME
 
 Grammar:
 	
-      .hsn       ::= <lsn><tnsub>(<trssub><plsmap>*)*
-      tnsub     ::= tnum
+      .hsn       ::= <lsn>(<trssub><plsmap>*)*
       trssub    ::= ht np <subnet>
       plsmap  ::= hp  lp
 
 Notes:
        <lsn> is low-level net specification according to .lsn,
-       'tnum' is total number of substituted transitions
        'ht' is high-level transition number, 'np' is number of place mappings,<subnet> is low-level net file name. 
        'hp' is high-level place number, 
        'lp' is low-level place number,

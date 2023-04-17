@@ -49,11 +49,19 @@ LSN file format v1.2 according to https://github.com/zhangq9919/Sleptsov-net-pro
 References:
 ------------
 1.D.A. Zaitsev, Universal Sleptsov net, International Journal of Computer Mathematics, 94(12) (2017) 2396–2408. https://doi.org/10. 1080/00207160.2017.1283410
+
 2.D.A. Zaitsev, Sleptsov Nets Run Fast, IEEE Transactions on Systems, Man, and Cybernetics: Systems 46(5) 682–693. https://doi.org/10. 1109/TSMC.2015.2444414
+
 3.D.A. Zaitsev, Sleptsov Net Computing, Chapter 672 in Mehdi KhosrowPour (Ed.) Encyclopedia of Information Science and Technology, Fourth Edition (10 Volumes). IGI-Global: USA, 2017, 7731–7743.HTTPS:// doi.org/10.4018/978-1-5225-2255-3.ch672 
+
 4.D.A. Zaitsev, J. J¨urjens . Programming in the Sleptsov net language for systems control[J]. Advances in Mechanical Engineering, 2016, 8(4).
+
 5.D.A. Zaitsev, S. Tomov and J. Dongarra, Solving Linear Diophantine Systems on Parallel Architectures. IEEE Transactions on Parallel and Distributed Systems, vol. 30, no. 5, pp. 1158-1169, 1 May 2019, doi: 10.1109/TPDS.2018.2873354. 
+
 6.A. I. Sleptsov, ”Equations and equivalent transformations of loaded Petri nets (algebraic approach)”, Proc. Comm. All-Union Conf. Formal Models Parallel Comput., pp. 151-158, 1988.
+
 7.Zhi Gang Zhu. Analysis and Research of Sorting Algorithm in Data Structure Based on C Language[J]. Journal of Physics Conference Series,2020,1544(1).
+
 8.Qing Zhang, Ding Liu, Yifan Hou, Sleptsov Net Processor, International Conference ”Problems of Infocommunications. Science and Technology” (PICST2022), 10-12 October, 2022, Kyiv, Ukraine.
+
 9.Hongfei Zhao, Ding Liu, Yifan Hou, Compiler and Linker of Sleptsov Net Program,International Conference ”Problems of Infocommunications. Science and Technology” (PICST2022), 10-12 October, 2022, Kyiv, Ukraine.

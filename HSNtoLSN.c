@@ -14,7 +14,7 @@
 #define MAXSTRLEN 255
 
 #define SKIP_COMM do{fgets(input_buffer,MAXSTRLEN,f);} while(input_buffer[0]==';') ;//skip comments
-#define MAX_NUM 7000
+
 /**
 ç¨‹åºä½¿ç”¨è¯´æ˜ï¼šç”¨æˆ·å¯é€šè¿‡è¾“å…¥â€œ-hâ€è·å–ç¨‹åºä½¿ç”¨è¯´æ˜ï¼ŒæŒ‰ç…§ç¨‹åºç”¨æ³•åŠè¾“å…¥/è¾“å‡ºçš„æ ¼å¼è¦æ±‚ï¼Œæ­£ç¡®ä½¿ç”¨ç¨‹åº
 
@@ -104,7 +104,7 @@ and the struct pointer struct pm *pm1.
 struct tspm { //structure of transitions subsititution and places mapping
 	int tnum; //number of subsitituted transition
 	int pmnum; //number of places mapping
-	char name[50]; //name of subnet file
+	char name[20]; //name of subnet file
 	struct pm *pm1; //pointer to places mapping
 };
 
@@ -133,7 +133,7 @@ and the structure storing each LSN: struct lsn *l_nt.
 **/
 struct net_table { //structure of net table
 	int file_n; //number of file
-	char filename[7000][20]; //record file name
+	char (*filename)[20]; //record file name
 	struct lsn *l_nt;
 };
 
@@ -222,12 +222,17 @@ Write HSN information function: including: write LSN part and transition substit
 int write_hsn(struct hsn *h,FILE *f); //write hsn into a file
 
 /**
+<<<<<<< HEAD
+¶ÁÈ¡LSNÎÄ¼şº¯Êı£ºÀûÓÃÎÄ¼şÖ¸Õë»ñÈ¡ÎÄ¼şµÚÒ»ĞĞµÄm£¬n£¬k,l,nstÊıÖµ£¬´æÈë½á¹¹Ìå±äÁ¿lºÍhÖĞ¡£¸ù¾İplaceÊıÁ¿mÎªmu·ÖÅä
+ÄÚ´æ¿Õ¼ä£¬¸ù¾İ»¡µÄÊıÁ¿kÎª»¡µÄ½á¹¹Ìå±äÁ¿·ÖÅäÄÚ´æ¿Õ¼ä£¬ÖğĞĞ¶ÁÈ¡»¡µÄĞÅÏ¢´æÈë½á¹¹Ìå±äÁ¿lÖĞ¡£ÔÙÎªmuµÄÃ¿¸öÔªËØ¸³Öµ
+=======
 è¯»å–LSNæ–‡ä»¶å‡½æ•°ï¼šåˆ©ç”¨æ–‡ä»¶æŒ‡é’ˆè·å–æ–‡ä»¶ç¬¬ä¸€è¡Œçš„mï¼Œnï¼Œk,l,nstæ•°å€¼ï¼Œå­˜å…¥ç»“æ„ä½“å˜é‡lå’Œhä¸­ã€‚æ ¹æ®placeæ•°é‡mä¸ºmuåˆ†é…
 å†…å­˜ç©ºé—´ï¼Œæ ¹æ®å¼§çš„æ•°é‡kä¸ºå¼§çš„ç»“æ„ä½“å˜é‡åˆ†é…å†…å­˜ç©ºé—´ï¼Œé€è¡Œè¯»å–å¼§çš„ä¿¡æ¯å­˜å…¥ç»“æ„ä½“å˜é‡lä¸­ã€‚å†ä¸ºmuçš„æ¯ä¸ªå…ƒç´ èµ‹å€¼ 
+>>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 
 Read LSN file function: use the file pointer to obtain the m, n, kï¼Œl,nst values of the first line of
 the file, and store them in the structure variable l and h. Allocate mu according to the number of places m
-Memory space, 
+Memory space,
 Allocate memory space for arc structure variables according to the number of arcs k,
 The information of the arc read line by line is stored in the structure variable l.
 **/
@@ -315,7 +320,7 @@ int main (int argc,char *argv[]) {
 	read_hsn(&h, f1);
 	fclose (f1);
 	create_net_table(&h,&nt);
-	
+
 	create_mapping_result(&mt,&nt,&h);
 
 	f2 = fopen(argv[2], "w" );
@@ -334,6 +339,13 @@ int main (int argc,char *argv[]) {
 //create a table of nets and read nets into structure
 int create_net_table(struct hsn *h,struct net_table *nt) {
 	int i,j;
+	int MAX_NUM=4*(h->nst);
+	nt->filename=(char (*)[20])malloc(sizeof(char *[20])*MAX_NUM);
+	if((nt->filename)==NULL) {
+		printf("***error: no enough memory for nt->filename\n");
+		exit(-1);
+	}
+
 	nt->file_n=0;
 
 	strcpy(nt->filename[(nt->file_n)++],"lsn of hsn"); //record lsn of hsn
@@ -352,8 +364,16 @@ int create_net_table(struct hsn *h,struct net_table *nt) {
 	}
 	/******read lsn into structure*******/
 	nt->l_nt=malloc((nt->file_n)*sizeof(struct lsn));
+	if((nt->l_nt)==NULL) {
+		printf("***error: no enough memory for nt->l_nt\n");
+		exit(-1);
+	}
 
+<<<<<<< HEAD
+	FILE *f3; //½«ËùĞèlsn¶ÁÈëÄÚ´æ
+=======
 	FILE *f3; //å°†æ‰€éœ€lsnè¯»å…¥å†…å­˜ 
+>>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	int temp;
 	for(i=1; i<nt->file_n; i++) {
 		f3 = fopen(nt->filename[i], "r" );
@@ -622,6 +642,7 @@ void cm_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,struc
 //create result lsn,include places,marking transitions and arcs
 int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct hsn *h) {
 	int i,j,c;
+	int MAX_NUM=4*(h->nst); //each substitution needs 4 subnets: 2 copy, 1 subnet,1 clean_move
 	int memory_p=0; //memory for places
 	int memory_t=0; //memory for transitions
 	int memory_a=0; //memory for arcs
@@ -636,9 +657,25 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 	memory_a+=h->l->k;
 
 	mt->pn=malloc(1.5*memory_p*sizeof(struct place_num)); //malloc for places (need control flow places)
+	if(mt->pn==NULL) {
+		printf("***error: no enough memory for mt->pn\n");
+		exit(-1);
+	}
 	mt->mark=malloc(1.5*memory_p*sizeof(int) ); //malloc for marking
+	if(mt->mark==NULL) {
+		printf("***error: no enough memory for mt->mark\n");
+		exit(-1);
+	}
 	mt->tn=malloc(1.5*memory_t*sizeof(struct transition_num)); //malloc for transition.  (need split and joint trantition)
+	if(mt->tn==NULL) {
+		printf("***error: no enough memory for mt->tn\n");
+		exit(-1);
+	}
 	mt->new_a=malloc(1.5*memory_a*sizeof(struct arc));//malloc for arcs
+	if(mt->new_a==NULL) {
+		printf("***error: no enough memory for mt->new_a\n");
+		exit(-1);
+	}
 
 	int start_p=(h->l->m)+1; //renumerate from hsn->num of places +1
 	int p_total=0; //array index of result places
@@ -651,26 +688,61 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 	int a=0;//intermediate variable
 	int b;//intermediate variable
 
-	int add_io[MAX_NUM];//record subsitituted net input/output places array index. (P1,P2,P3 of add_lsn)
+	int *add_io;//record subsitituted net input/output places array index. (P1,P2,P3 of add_lsn)
+	add_io=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(add_io==NULL) {
+		printf("***error: no enough memory for add_io\n");
+		exit(-1);
+	}
 	int addi=0;
 	int addo=0; //i:record index. o:use index
-	int add_cf[MAX_NUM];//record subsitituted net control flow places array index (P4,P5 of add_lsn)
+	int *add_cf;//record subsitituted net control flow places array index (P4,P5 of add_lsn)
+	add_cf=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(add_cf==NULL) {
+		printf("***error: no enough memory for add_cf\n");
+		exit(-1);
+	}
 	int add_cf_i=0;
 	int add_cf_o=0; //i:record index. o:use index
 
-	int split[MAX_NUM]; //record copy net place array index. split[]:places connect with split transition.
+	int *split; //record copy net place array index. split[]:places connect with split transition.
+	split=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(split==NULL) {
+		printf("***error: no enough memory for split\n");
+		exit(-1);
+	}
 	int sp_in=0,sp_out=0; //in:record index. out:use index
 
-	int	joint[MAX_NUM]; //record copy net place array index. joint[]: places connect with joint transition
+	int	*joint; //record copy net place array index. joint[]: places connect with joint transition
+	joint=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(joint==NULL) {
+		printf("***error: no enough memory for joint\n");
+		exit(-1);
+	}
 	int jo_in=0,jo_out=0; //in:record index. out:use index
 
-	int t_split[MAX_NUM]; //record transition array index
+	int *t_split; //record transition array index
+	t_split=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(t_split==NULL) {
+		printf("***error: no enough memory for t_split\n");
+		exit(-1);
+	}
 	int	t_sp_in=0,t_sp_out=0;  //in:record index. out:use index
 
-	int c_m_cf[MAX_NUM]; //record clean_move control flow places array index
+	int *c_m_cf; //record clean_move control flow places array index
+	c_m_cf=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(c_m_cf==NULL) {
+		printf("***error: no enough memory for c_m_cf\n");
+		exit(-1);
+	}
 	int cf_in=0,cf_out=0; //in:record index. out:use index
 
-	int cf_num[MAX_NUM]; //record number of control flow place
+	int *cf_num; //record number of control flow place
+	cf_num=(int*)malloc(sizeof(int)*MAX_NUM);
+	if(cf_num==NULL) {
+		printf("***error: no enough memory for cf_num\n");
+		exit(-1);
+	}
 	int cf_n_in=0,cf_n_out=0; //in:record index. out:use index
 
 	int p_n;//place mapping number
@@ -684,7 +756,7 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		//å­ç½‘çš„åº“æ‰€æ˜ å°„å‡½æ•°
 
 		sub_pmapping(i, a, &start_p, &p_total, mt, nt, h, add_io, &addi, add_cf, &add_cf_i, &a_p_total);
-	
+
 		/*************transitions mapping****************/
 		sub_tmapping(i, a, &start_t, &t_total, mt, nt, h, &a_t_total);
 		a++;
@@ -782,8 +854,13 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		}
 
 	}
+<<<<<<< HEAD
+
+	//²»ĞèÒªÌæ´úµÄ±äÇ¨£¬ÓÉHSN´«µİÖÁLSN
+=======
 	
 	//ä¸éœ€è¦æ›¿ä»£çš„å˜è¿ï¼Œç”±HSNä¼ é€’è‡³LSN
+>>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i<(h->l->k); i++) {
 		for(j=0; j<(h->nst); j++) {
 			if((h->l->a[i].t)==(h->t[j].tnum)) {
@@ -810,21 +887,31 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 	}
 	/******write result net into a structure of lsn*********/
 	mt->l_result=malloc(sizeof(struct lsn));
+	if(mt->l_result==NULL) {
+		printf("***error: no enough memory for mt->l_result\n");
+		exit(-1);
+	}
 	mt->l_result->m=start_p-1;
 	mt->l_result->n=start_t-1;
 	mt->l_result->k=a_t_total;
 
 	mt->l_result->mu = malloc( (mt->l_result->m)*sizeof(int) ); // marking
 	if((mt->l_result->mu)==NULL) {
-		printf("***error: no enough memory for result marking\n");
-		exit(2);
+		printf("***error: no enough memory for mt->l_result->mu\n");
+		exit(-1);
 	}
+<<<<<<< HEAD
+
+	//¼ÇÂ¼·Ç0¿âËù×ÜÊı
+	int noneZero=0;
+=======
 	
 	//è®°å½•é0åº“æ‰€æ€»æ•°
 	int noneZero=0; 
+>>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i<start_p-1; i++) {
 		mt->l_result->mu[i]=mt->mark[i];
-		if(mt->mark[i]!=0){
+		if(mt->mark[i]!=0) {
 			noneZero++;
 		}
 	}
@@ -832,8 +919,8 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 
 	mt->l_result->a = malloc( (mt->l_result->k)*sizeof(struct arc) ); // arcs
 	if((mt->l_result->a)==NULL) {
-		printf("***error: no enough memory for result arc\n");
-		exit(2);
+		printf("***error: no enough memory for mt->l_result->a\n");
+		exit(-1);
 	}
 	for(i=0; i<a_t_total; i++) {
 		mt->l_result->a[i].p=mt->new_a[i].p;
@@ -845,15 +932,23 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 //read hsn
 int read_hsn(struct hsn *h,FILE *f) {
 	int i;
-	
+
 	h->l=malloc(sizeof(struct lsn));
+	if((h->l)==NULL) {
+		printf("***error: no enough memory for h->l\n");
+		exit(-1);
+	}
 	read_lsn((h->l),&(h->nst),f);
-	
+
 	h->t=malloc((h->nst)*sizeof(struct tspm));
+	if((h->t)==NULL) {
+		printf("***error: no enough memory for h->t\n");
+		exit(-1);
+	}
 	for(i=0; i<h->nst; i++) {
 		read_ts(&(h->t[i]),f);
 	}
-	
+
 	return 0;
 }
 //write hsn
@@ -942,7 +1037,7 @@ int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
 	SKIP_COMM
 	sscanf(input_buffer, "%d %d %d %d %d", &(l->m), &(l->n), &(l->k), &(l->l), nst);
 	header_check_err((l->m), (l->n), (l->k));
-	
+
 	l->a = malloc( (l->k)*sizeof(struct arc) ); // arcs
 	if((l->a)==NULL) {
 		printf("***error: no enough memory for l->a\n");
@@ -956,12 +1051,21 @@ int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
 			duplicate_check(l->a[i].p,l->a[i].t,l->a[j].p,l->a[j].t);
 		}
 	}
-	
+
 	l->mu = malloc( (l->m)*sizeof(int) ); // marking
 	if((l->mu)==NULL) {
 		printf("***error: no enough memory for l->mu\n");
 		exit(2);
 	}
+<<<<<<< HEAD
+
+	//set all markings zero  ÏÈ½«tokenÈ«ÖÃÎª0
+	for(i=0; i < l->m; i++) {
+		l->mu[i]=0;
+	}
+	//set none zero markings  ¸³Öµ·Ç0token
+	int pnum,marking;//·Ç0¿âËùµÄ±àºÅºÍtokenÊı
+=======
 	
 	//set all markings zero  å…ˆå°†tokenå…¨ç½®ä¸º0 
 	for(i=0; i < l->m; i++) {
@@ -969,19 +1073,20 @@ int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
 	}
 	//set none zero markings  èµ‹å€¼é0token 
 	int pnum,marking;//é0åº“æ‰€çš„ç¼–å·å’Œtokenæ•° 
+>>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i < (l->l); i++) {
 		SKIP_COMM
 		sscanf(input_buffer, "%d %d", &pnum,&marking );
 		l->mu[pnum-1]=marking;
 	}
-	
+
 	return 0;
 }
 
 // write lsn from memory into a .txt file;
 int write_lsn(struct lsn * l, FILE *f) {
 	int i;
-	
+
 	fprintf(f,";m n k l nst\n") ;
 	fprintf(f, "%d %d %d %d 0\n", (l->m), (l->n), (l->k), (l->l));
 
@@ -991,9 +1096,13 @@ int write_lsn(struct lsn * l, FILE *f) {
 		fprintf(f, "%d %d %d\n", l->a[i].p, l->a[i].t, l->a[i].w);
 	}
 
-	
+
 	fprintf(f,"; mu(p):\n") ;
+<<<<<<< HEAD
+	//·Ç0¿âËù±àºÅ¼°tokenÊı
+=======
 	//é0åº“æ‰€ç¼–å·åŠtokenæ•° 
+>>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i < l->m; i++) {
 		if(l->mu[i]!=0) {
 			fprintf(f, "%d %d\n", i+1, l->mu[i]);
@@ -1003,4 +1112,4 @@ int write_lsn(struct lsn * l, FILE *f) {
 	return 0;
 }
 
-//  @ 2023 Hongfei Zhao	
+//  @ 2023 Hongfei Zhao

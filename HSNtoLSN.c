@@ -1,7 +1,7 @@
 ///////////////////////////////// HSN to LSN //////////////////////////////////////////////////////
 //  Compiler and linker of Sleptsov net program.                                                 //
 //  To complete the conversion from high-level Sleptsov net (HSN) to low-level Sleptsov net (LSN)//
-//  @ 2023 Hongfei Zhao										 //
+//  @ 2023 Hongfei Zhao												                             //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Command line:  HSNtoLSN hsn_file.txt result_lsn_file.txt
@@ -16,7 +16,7 @@
 #define SKIP_COMM do{fgets(input_buffer,MAXSTRLEN,f);} while(input_buffer[0]==';') ;//skip comments
 
 /**
-ç¨‹åºä½¿ç”¨è¯´æ˜ï¼šç”¨æˆ·å¯é€šè¿‡è¾“å…¥â€œ-hâ€è·å–ç¨‹åºä½¿ç”¨è¯´æ˜ï¼ŒæŒ‰ç…§ç¨‹åºç”¨æ³•åŠè¾“å…¥/è¾“å‡ºçš„æ ¼å¼è¦æ±‚ï¼Œæ­£ç¡®ä½¿ç”¨ç¨‹åº
+³ÌĞòÊ¹ÓÃËµÃ÷£ºÓÃ»§¿ÉÍ¨¹ıÊäÈë¡°-h¡±»ñÈ¡³ÌĞòÊ¹ÓÃËµÃ÷£¬°´ÕÕ³ÌĞòÓÃ·¨¼°ÊäÈë/Êä³öµÄ¸ñÊ½ÒªÇó£¬ÕıÈ·Ê¹ÓÃ³ÌĞò
 
 Program usage instructions: Users can obtain program usage instructions by entering "-h",
 and use the program correctly according to the program usage and input/output format requirements
@@ -36,11 +36,11 @@ double magma_wtime( void ) {
 	return t.tv_sec + t.tv_usec*1e-6;
 }
 /**
-å¼§çš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨ä¸€æ¡å¼§çš„ç±»å‹å’ŒæŒ‡å‘ä¿¡æ¯ã€‚
-åº“æ‰€æŒ‡å‘å˜è¿çš„å¸¸è§„å¼§ï¼šp>0,t>0,w>0
-å˜è¿æŒ‡å‘åº“æ‰€çš„å¸¸è§„å¼§ï¼šp<0,t>0,w>0
-æŠ‘åˆ¶å¼§ï¼š 			  p>0,t>0,w<0
-t1æŒ‡å‘t2çš„ä¼˜å…ˆå¼§ï¼š	  t1<0,t2<0
+»¡µÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢Ò»Ìõ»¡µÄÀàĞÍºÍÖ¸ÏòĞÅÏ¢¡£
+¿âËùÖ¸Ïò±äÇ¨µÄ³£¹æ»¡£ºp>0,t>0,w>0
+±äÇ¨Ö¸Ïò¿âËùµÄ³£¹æ»¡£ºp<0,t>0,w>0
+ÒÖÖÆ»¡£º 			  p>0,t>0,w<0
+t1Ö¸Ïòt2µÄÓÅÏÈ»¡£º	  t1<0,t2<0
 
 Arc structure: This structure is used to store the type and pointing information of an arc.
 A regular arc where a place points to a transition: p>0, t>0, w>0
@@ -54,8 +54,8 @@ struct arc { //structure of arcs
 };
 
 /**
-ç®€å•æˆ–ä½çº§Sleptsov netçš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨ä¸€ä¸ªLSNçš„ç»“æ„ä¿¡æ¯ï¼ŒåŒ…æ‹¬åº“æ‰€çš„æ•°é‡ï¼šmï¼Œå˜è¿çš„æ•°é‡ï¼šn
-å¼§çš„æ•°é‡ï¼škï¼Œæ¯ä¸ªåº“æ‰€åˆå§‹çš„æ‰˜è‚¯æ•°é‡ï¼šmuï¼Œä»¥åŠç”¨äºå­˜å‚¨æ­¤ç½‘ç»œçš„å¼§çš„ä¿¡æ¯çš„ç»“æ„ä½“æŒ‡é’ˆï¼šstruct arc *a;
+¼òµ¥»òµÍ¼¶Sleptsov netµÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢Ò»¸öLSNµÄ½á¹¹ĞÅÏ¢£¬°üÀ¨¿âËùµÄÊıÁ¿£ºm£¬±äÇ¨µÄÊıÁ¿£ºn
+»¡µÄÊıÁ¿£ºk£¬Ã¿¸ö¿âËù³õÊ¼µÄÍĞ¿ÏÊıÁ¿£ºmu£¬ÒÔ¼°ÓÃÓÚ´æ´¢´ËÍøÂçµÄ»¡µÄĞÅÏ¢µÄ½á¹¹ÌåÖ¸Õë£ºstruct arc *a;
 
  Plain or low-level Sleptsov net structure: This structure is used to store the structural
  information of a LSN, including the number of places: m, the number of transitions: n,
@@ -72,12 +72,12 @@ struct lsn { //structure of low-level sleptsov net
 };
 
 /**
-åº“æ‰€æ˜ å°„çš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨é«˜çº§Sleptsov netçš„åº“æ‰€ï¼šhpä¸ä½çº§Sleptsov netçš„åº“æ‰€ï¼šlpä¹‹é—´çš„æ˜ å°„å…³ç³»ï¼Œ
-å¹¶ä¸”é€šè¿‡hpä¸lpç¬¦å·çš„ç»„åˆè¡¨ç¤ºåº“æ‰€çš„ä¸åŒç”¨é€”ï¼š
-æ•°æ®è¾“å…¥åº“æ‰€ï¼šhp>0,lp>0,
-æ•°æ®è¾“å‡ºåº“æ‰€ï¼šhp>0,lp<0ï¼Œ
-æ§åˆ¶æµå¼€å§‹åº“æ‰€ï¼šhp<0,lp>0,
-æ§åˆ¶æµç»“æŸåº“æ‰€ï¼šhp<0,lp<0.
+¿âËùÓ³ÉäµÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢¸ß¼¶Sleptsov netµÄ¿âËù£ºhpÓëµÍ¼¶Sleptsov netµÄ¿âËù£ºlpÖ®¼äµÄÓ³Éä¹ØÏµ£¬
+²¢ÇÒÍ¨¹ıhpÓëlp·ûºÅµÄ×éºÏ±íÊ¾¿âËùµÄ²»Í¬ÓÃÍ¾£º
+Êı¾İÊäÈë¿âËù£ºhp>0,lp>0,
+Êı¾İÊä³ö¿âËù£ºhp>0,lp<0£¬
+¿ØÖÆÁ÷¿ªÊ¼¿âËù£ºhp<0,lp>0,
+¿ØÖÆÁ÷½áÊø¿âËù£ºhp<0,lp<0.
 
 Place mapping structure: This structure is used to store the mapping relationship between
 the high-level Sleptsov net's place: hp and the low-level Sleptsov net's place: lp,
@@ -93,8 +93,8 @@ struct pm { //structure of places mapping
 };
 
 /**
-å˜è¿æ›¿ä»£å’Œåº“æ‰€æ˜ å°„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨å˜è¿æ›¿ä»£çš„ä¿¡æ¯ï¼ŒåŒ…æ‹¬è¢«æ›¿ä»£å˜è¿çš„ç¼–å·ï¼štnumï¼Œåº“æ‰€æ˜ å°„çš„æ•°é‡ï¼špmnum,
-éœ€è¦æ›¿ä»£çš„ä½çº§ç½‘ç»œçš„åç§°ï¼ˆæ–‡ä»¶åï¼‰ï¼šname[],ä»¥åŠç”¨äºå­˜å‚¨åº“æ‰€æ˜ å°„ä¿¡æ¯çš„ç»“æ„ä½“æŒ‡é’ˆstruct pm *pm1.
+±äÇ¨Ìæ´úºÍ¿âËùÓ³Éä½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢±äÇ¨Ìæ´úµÄĞÅÏ¢£¬°üÀ¨±»Ìæ´ú±äÇ¨µÄ±àºÅ£ºtnum£¬¿âËùÓ³ÉäµÄÊıÁ¿£ºpmnum,
+ĞèÒªÌæ´úµÄµÍ¼¶ÍøÂçµÄÃû³Æ£¨ÎÄ¼şÃû£©£ºname[],ÒÔ¼°ÓÃÓÚ´æ´¢¿âËùÓ³ÉäĞÅÏ¢µÄ½á¹¹ÌåÖ¸Õëstruct pm *pm1.
 
 Transition substitution and place mapping structure: This structure is used to store the information of
 transition substitution, including the number of the substituted transition: tnum,
@@ -109,8 +109,8 @@ struct tspm { //structure of transitions subsititution and places mapping
 };
 
 /**
-é«˜çº§sleptsov netçš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨ä¸€ä¸ªHSNçš„ç»“æ„ä¿¡æ¯ï¼ŒåŒ…æ‹¬ä½çº§ç½‘ç»œéƒ¨åˆ†ï¼šstruct lsn *l,
-å˜è¿æ›¿ä»£çš„æ€»æ•°é‡ï¼šnstï¼Œ å˜è¿æ›¿ä»£å’Œåº“æ‰€æ˜ å°„éƒ¨åˆ†ï¼šstruct tspm *t
+¸ß¼¶sleptsov netµÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢Ò»¸öHSNµÄ½á¹¹ĞÅÏ¢£¬°üÀ¨µÍ¼¶ÍøÂç²¿·Ö£ºstruct lsn *l,
+±äÇ¨Ìæ´úµÄ×ÜÊıÁ¿£ºnst£¬ ±äÇ¨Ìæ´úºÍ¿âËùÓ³Éä²¿·Ö£ºstruct tspm *t
 
 Structure of high-level sleptsov net: This structure is used to store the structure information of an HSN,
 including the low-level network part: struct lsn *l, Total number of transition substitutions: nst,
@@ -123,8 +123,8 @@ struct hsn { //structure of high-level sleptsov net
 };
 
 /**
-ç½‘ç»œåˆ—è¡¨çš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨ä¸€ä¸ªHSNè½¬æ¢ä¸ºLSNè¿‡ç¨‹ä¸­ï¼Œéœ€è¦ç”¨åˆ°çš„æ‰€æœ‰LSNçš„ä¿¡æ¯ï¼Œ
-åŒ…æ‹¬:æ¯ä¸€ä¸ªLSNå¯¹åº”çš„ç¼–å·ï¼šfile_n, ç½‘ç»œåç§°ï¼šfilename[][], ä»¥åŠå­˜å‚¨æ¯ä¸ªLSNçš„ç»“æ„ä½“ï¼šstruct lsn *l_nt.
+ÍøÂçÁĞ±íµÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢Ò»¸öHSN×ª»»ÎªLSN¹ı³ÌÖĞ£¬ĞèÒªÓÃµ½µÄËùÓĞLSNµÄĞÅÏ¢£¬
+°üÀ¨:Ã¿Ò»¸öLSN¶ÔÓ¦µÄ±àºÅ£ºfile_n, ÍøÂçÃû³Æ£ºfilename[][], ÒÔ¼°´æ´¢Ã¿¸öLSNµÄ½á¹¹Ìå£ºstruct lsn *l_nt.
 
 The structure of the network list: This structure is used to store all the LSN information that needs
 to be used in the process of converting an HSN to an LSN.
@@ -138,8 +138,8 @@ struct net_table { //structure of net table
 };
 
 /**
-åº“æ‰€ç¼–å·çš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨HSNå‘LSNè½¬æ¢è¿‡ç¨‹ä¸­æ‰€æœ‰åº“æ‰€çš„ç¼–å·ï¼ŒåŒ…æ‹¬ï¼šè½¬æ¢å‰çš„åº“æ‰€ç¼–å·ï¼špre_p,å’Œè½¬æ¢
-åé‡æ–°ç¼–æ’çš„åºå·ï¼šnew_p.
+¿âËù±àºÅµÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢HSNÏòLSN×ª»»¹ı³ÌÖĞËùÓĞ¿âËùµÄ±àºÅ£¬°üÀ¨£º×ª»»Ç°µÄ¿âËù±àºÅ£ºpre_p,ºÍ×ª»»
+ºóÖØĞÂ±àÅÅµÄĞòºÅ£ºnew_p.
 
 The structure of the place number: This structure is used to store the number of all places in the
 process of HSN to LSN conversion, including: the place number before conversion: pre_p,
@@ -151,8 +151,8 @@ struct place_num { //structure of places number
 };
 
 /**
-å˜è¿ç¼–å·çš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨HSNå‘LSnè½¬æ¢è¿‡ç¨‹ä¸­æ‰€æœ‰å˜è¿çš„ç¼–å·ï¼ŒåŒ…æ‹¬ï¼šè½¬æ¢å‰çš„å˜è¿ç¼–å·ï¼špre_t,å’Œè½¬æ¢
-åé‡æ–°ç¼–æ’çš„åºå·ï¼šnew_t.
+±äÇ¨±àºÅµÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢HSNÏòLSn×ª»»¹ı³ÌÖĞËùÓĞ±äÇ¨µÄ±àºÅ£¬°üÀ¨£º×ª»»Ç°µÄ±äÇ¨±àºÅ£ºpre_t,ºÍ×ª»»
+ºóÖØĞÂ±àÅÅµÄĞòºÅ£ºnew_t.
 
 The structure of transition number: This structure is used to store the number of all transitions in
 the process of HSN to LSn conversion, including: the transition number before the conversion: pre_t,
@@ -164,9 +164,9 @@ struct transition_num { //structure of transitions number
 };
 
 /**
-ç½‘ç»œè½¬æ¢è¿‡ç¨‹ä¸­å­˜å‚¨ä¿¡æ¯çš„ç»“æ„ä½“ï¼šæœ¬ç»“æ„ä½“ç”¨äºå­˜å‚¨HSNå‘LSNè½¬æ¢æ—¶çš„ç½‘ç»œä¿¡æ¯ï¼ŒåŒ…æ‹¬ï¼šåº“æ‰€ç¼–å·:struct place_num *pn,
-å˜è¿ç¼–å·:struct transition_num *tn,åˆå§‹æ‰˜è‚¯æ•°é‡:*mark,å¼§çš„ç±»å‹å’ŒæŒ‡å‘å…³ç³»:struct arc *new_aï¼Œ
-ä»¥åŠè½¬æ¢å®Œæˆåçš„LSN:struct lsn *l_result.
+ÍøÂç×ª»»¹ı³ÌÖĞ´æ´¢ĞÅÏ¢µÄ½á¹¹Ìå£º±¾½á¹¹ÌåÓÃÓÚ´æ´¢HSNÏòLSN×ª»»Ê±µÄÍøÂçĞÅÏ¢£¬°üÀ¨£º¿âËù±àºÅ:struct place_num *pn,
+±äÇ¨±àºÅ:struct transition_num *tn,³õÊ¼ÍĞ¿ÏÊıÁ¿:*mark,»¡µÄÀàĞÍºÍÖ¸Ïò¹ØÏµ:struct arc *new_a£¬
+ÒÔ¼°×ª»»Íê³ÉºóµÄLSN:struct lsn *l_result.
 
 Structure for storing information during network conversion: This structure is used to store network
 information during HSN to LSN conversion, including: place number: struct place_num *pn,
@@ -183,8 +183,8 @@ struct mapping_result { //structure of mapping
 };
 
 /**
-åˆ›å»ºç½‘ç»œåˆ—è¡¨å‡½æ•°ï¼šæ ¹æ®è¯»å…¥çš„HSNæ–‡ä»¶ï¼Œé“¾æ¥æ‰€éœ€è¦çš„å…¨éƒ¨å­ç½‘æ¨¡å—ï¼ŒåŒ…æ‹¬COPYï¼ŒCLEAN_MOVEå’Œæ›¿ä»£ç›¸åº”å˜è¿çš„
-å­ç½‘æ¨¡å—ï¼Œå¹¶ä¸ºæ¯ä¸ªå­ç½‘ç¼–å·ï¼ŒåŒæ—¶å°†æ¯ä¸ªå­ç½‘æ¨¡å—å­˜å…¥ä¸€ä¸ªç»“æ„ä½“å˜é‡ä¸­ã€‚
+´´½¨ÍøÂçÁĞ±íº¯Êı£º¸ù¾İ¶ÁÈëµÄHSNÎÄ¼ş£¬Á´½ÓËùĞèÒªµÄÈ«²¿×ÓÍøÄ£¿é£¬°üÀ¨COPY£¬CLEAN_MOVEºÍÌæ´úÏàÓ¦±äÇ¨µÄ
+×ÓÍøÄ£¿é£¬²¢ÎªÃ¿¸ö×ÓÍø±àºÅ£¬Í¬Ê±½«Ã¿¸ö×ÓÍøÄ£¿é´æÈëÒ»¸ö½á¹¹Ìå±äÁ¿ÖĞ¡£
 
 Create a network table function: According to the read HSN file, link all the required subnet modules,
 including COPY, CLEAN_MOVE and the subnet modules that substitute the corresponding transitions,
@@ -194,9 +194,9 @@ and number each subnet, and store each subnet module in a structure variable.
 int create_net_table(struct hsn *h,struct net_table *nt);
 
 /**
-ç¼–è¯‘æœ€ç»ˆçš„LSNå‡½æ•°ï¼šæ ¹æ®ç½‘ç»œåˆ—è¡¨çš„å­˜å‚¨ä¿¡æ¯ï¼ŒæŒ‰ç…§æ•°æ®ä¼ è¾“çš„æ–¹å‘å’Œæ§åˆ¶æµçš„æ–¹å‘ï¼Œå°†æ‰€ç”¨åˆ°çš„å­ç½‘æ¨¡å—é‡æ–°ç¼–æ’ï¼Œ
-åŒ…æ‹¬ï¼šåº“æ‰€çš„èåˆä¸æ‰˜è‚¯æ•°çš„èµ‹å€¼ï¼Œåº“æ‰€ä¸å˜è¿çš„é‡æ–°ç¼–å·ï¼Œå¼§çš„è¿æ¥ï¼Œä»¥åŠå¢æ·»æ–°çš„å˜è¿ç”¨äºåˆ†è£‚ä¸åˆå¹¶æ§åˆ¶æµï¼Œ
-æœ€ç»ˆå¾—åˆ°LSNï¼Œå¯è¿è¡ŒäºSNçš„å¤„ç†å™¨ä¸Šã€‚
+±àÒë×îÖÕµÄLSNº¯Êı£º¸ù¾İÍøÂçÁĞ±íµÄ´æ´¢ĞÅÏ¢£¬°´ÕÕÊı¾İ´«ÊäµÄ·½ÏòºÍ¿ØÖÆÁ÷µÄ·½Ïò£¬½«ËùÓÃµ½µÄ×ÓÍøÄ£¿éÖØĞÂ±àÅÅ£¬
+°üÀ¨£º¿âËùµÄÈÚºÏÓëÍĞ¿ÏÊıµÄ¸³Öµ£¬¿âËùÓë±äÇ¨µÄÖØĞÂ±àºÅ£¬»¡µÄÁ¬½Ó£¬ÒÔ¼°ÔöÌíĞÂµÄ±äÇ¨ÓÃÓÚ·ÖÁÑÓëºÏ²¢¿ØÖÆÁ÷£¬
+×îÖÕµÃµ½LSN£¬¿ÉÔËĞĞÓÚSNµÄ´¦ÀíÆ÷ÉÏ¡£
 
 Compile the final LSN function: Use the storage information of the network list to rearrange the used
 subnet modules according to the direction of data transmission and the direction of control flow,
@@ -208,29 +208,24 @@ and finally obtaining LSN, which can run on the processor of SN .
 int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct hsn *h);
 
 /**
-è¯»HSNä¿¡æ¯å‡½æ•°ï¼šåŒ…æ‹¬ï¼šè¯»LSNéƒ¨åˆ†å’Œå˜è¿æ›¿ä»£éƒ¨åˆ†
+¶ÁHSNĞÅÏ¢º¯Êı£º°üÀ¨£º¶ÁLSN²¿·ÖºÍ±äÇ¨Ìæ´ú²¿·Ö
 
 Read HSN information function: including: read LSN part and transition substitution part
 **/
 int read_hsn(struct hsn *h,FILE *f); //read a hsn file
 
 /**
-å†™HSNä¿¡æ¯å‡½æ•°ï¼šåŒ…æ‹¬ï¼šå†™LSNéƒ¨åˆ†å’Œå˜è¿æ›¿ä»£éƒ¨åˆ†
+Ğ´HSNĞÅÏ¢º¯Êı£º°üÀ¨£ºĞ´LSN²¿·ÖºÍ±äÇ¨Ìæ´ú²¿·Ö
 
 Write HSN information function: including: write LSN part and transition substitution part
 **/
 int write_hsn(struct hsn *h,FILE *f); //write hsn into a file
 
 /**
-<<<<<<< HEAD
 ¶ÁÈ¡LSNÎÄ¼şº¯Êı£ºÀûÓÃÎÄ¼şÖ¸Õë»ñÈ¡ÎÄ¼şµÚÒ»ĞĞµÄm£¬n£¬k,l,nstÊıÖµ£¬´æÈë½á¹¹Ìå±äÁ¿lºÍhÖĞ¡£¸ù¾İplaceÊıÁ¿mÎªmu·ÖÅä
 ÄÚ´æ¿Õ¼ä£¬¸ù¾İ»¡µÄÊıÁ¿kÎª»¡µÄ½á¹¹Ìå±äÁ¿·ÖÅäÄÚ´æ¿Õ¼ä£¬ÖğĞĞ¶ÁÈ¡»¡µÄĞÅÏ¢´æÈë½á¹¹Ìå±äÁ¿lÖĞ¡£ÔÙÎªmuµÄÃ¿¸öÔªËØ¸³Öµ
-=======
-è¯»å–LSNæ–‡ä»¶å‡½æ•°ï¼šåˆ©ç”¨æ–‡ä»¶æŒ‡é’ˆè·å–æ–‡ä»¶ç¬¬ä¸€è¡Œçš„mï¼Œnï¼Œk,l,nstæ•°å€¼ï¼Œå­˜å…¥ç»“æ„ä½“å˜é‡lå’Œhä¸­ã€‚æ ¹æ®placeæ•°é‡mä¸ºmuåˆ†é…
-å†…å­˜ç©ºé—´ï¼Œæ ¹æ®å¼§çš„æ•°é‡kä¸ºå¼§çš„ç»“æ„ä½“å˜é‡åˆ†é…å†…å­˜ç©ºé—´ï¼Œé€è¡Œè¯»å–å¼§çš„ä¿¡æ¯å­˜å…¥ç»“æ„ä½“å˜é‡lä¸­ã€‚å†ä¸ºmuçš„æ¯ä¸ªå…ƒç´ èµ‹å€¼ 
->>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 
-Read LSN file function: use the file pointer to obtain the m, n, kï¼Œl,nst values of the first line of
+Read LSN file function: use the file pointer to obtain the m, n, k£¬l,nst values of the first line of
 the file, and store them in the structure variable l and h. Allocate mu according to the number of places m
 Memory space,
 Allocate memory space for arc structure variables according to the number of arcs k,
@@ -239,9 +234,9 @@ The information of the arc read line by line is stored in the structure variable
 int read_lsn(struct lsn * l,int *nst, FILE *f); //read a lsn file
 
 /**
-å†™LSNæ–‡ä»¶å‡½æ•°ï¼šæ ¹æ®LSNæ–‡ä»¶è¦æ±‚çš„æ ¼å¼ï¼Œåˆ©ç”¨æ–‡ä»¶æŒ‡é’ˆä»ç»“æ„ä½“å˜é‡ä¸­è·å–mï¼Œnï¼Œkæ•°å€¼ï¼Œå¹¶å†™å‡ºè‡³æ–‡ä»¶ä¸­ã€‚
-æ ¹æ®placeæ•°é‡mï¼Œé€ä¸ªè¯»å–ç»“æ„ä½“å˜é‡ä¸­çš„muå€¼å¹¶å†™å‡ºè‡³æ–‡ä»¶ä¸­ã€‚æ ¹æ®å¼§çš„æ•°é‡kï¼Œé€ä¸ªè¯»å–ç»“æ„ä½“å˜é‡ä¸­å¼§çš„ä¿¡æ¯ï¼Œ
-å¹¶å†™å‡ºè‡³æ–‡ä»¶ä¸­ã€‚
+Ğ´LSNÎÄ¼şº¯Êı£º¸ù¾İLSNÎÄ¼şÒªÇóµÄ¸ñÊ½£¬ÀûÓÃÎÄ¼şÖ¸Õë´Ó½á¹¹Ìå±äÁ¿ÖĞ»ñÈ¡m£¬n£¬kÊıÖµ£¬²¢Ğ´³öÖÁÎÄ¼şÖĞ¡£
+¸ù¾İplaceÊıÁ¿m£¬Öğ¸ö¶ÁÈ¡½á¹¹Ìå±äÁ¿ÖĞµÄmuÖµ²¢Ğ´³öÖÁÎÄ¼şÖĞ¡£¸ù¾İ»¡µÄÊıÁ¿k£¬Öğ¸ö¶ÁÈ¡½á¹¹Ìå±äÁ¿ÖĞ»¡µÄĞÅÏ¢£¬
+²¢Ğ´³öÖÁÎÄ¼şÖĞ¡£
 
 Write LSN file function: According to the format required by the LSN file, use the file pointer to
 obtain m, n, k values from the structure variables, and write them out to the file.
@@ -252,10 +247,10 @@ structure variable one by one, and write them out to the file.
 int write_lsn(struct lsn * l, FILE *f); //write lsn into a file
 
 /**
-è¯»å˜è¿æ›¿ä»£éƒ¨åˆ†çš„å‡½æ•°ï¼šæ ¹æ®HSNæ–‡ä»¶çš„æ ¼å¼è¦æ±‚ï¼Œåˆ©ç”¨æ–‡ä»¶æŒ‡é’ˆè·å–å˜è¿æ›¿ä»£çš„æ€»æ•°é‡ï¼šnstï¼Œ
-æ ¹æ®nstçš„æ•°å€¼ï¼Œåˆ©ç”¨å¾ªç¯ï¼Œè¯»å–è¢«æ›¿ä»£å˜è¿çš„ç¼–å·ï¼štnumï¼Œåº“æ‰€æ˜ å°„çš„æ•°é‡ï¼špmnumå’Œå­ç½‘æ¨¡å—ï¼šnameã€‚
-æ ¹æ®pmnumçš„å€¼ï¼Œåˆ©ç”¨å¾ªç¯ï¼Œè¯»å–æ¯å¯¹åº“æ‰€æ˜ å°„ä¸­HSNçš„åº“æ‰€ç¼–å·å’ŒLSNçš„åº“æ‰€ç¼–å·ã€‚
-å°†ä¸Šè¿°ä¿¡æ¯å‡å­˜å…¥ç»“æ„ä½“å˜é‡ä¸­ã€‚
+¶Á±äÇ¨Ìæ´ú²¿·ÖµÄº¯Êı£º¸ù¾İHSNÎÄ¼şµÄ¸ñÊ½ÒªÇó£¬ÀûÓÃÎÄ¼şÖ¸Õë»ñÈ¡±äÇ¨Ìæ´úµÄ×ÜÊıÁ¿£ºnst£¬
+¸ù¾İnstµÄÊıÖµ£¬ÀûÓÃÑ­»·£¬¶ÁÈ¡±»Ìæ´ú±äÇ¨µÄ±àºÅ£ºtnum£¬¿âËùÓ³ÉäµÄÊıÁ¿£ºpmnumºÍ×ÓÍøÄ£¿é£ºname¡£
+¸ù¾İpmnumµÄÖµ£¬ÀûÓÃÑ­»·£¬¶ÁÈ¡Ã¿¶Ô¿âËùÓ³ÉäÖĞHSNµÄ¿âËù±àºÅºÍLSNµÄ¿âËù±àºÅ¡£
+½«ÉÏÊöĞÅÏ¢¾ù´æÈë½á¹¹Ìå±äÁ¿ÖĞ¡£
 
 The function of reading the transition substitution part: According to the format requirements
 of the HSN file, use the file pointer to obtain the total number of transition substitutions: nst,
@@ -267,13 +262,13 @@ mappings. The above information is stored in the structure variable.
 int read_ts(struct tspm * tm,FILE *f); //read transitions subsititution of hsn
 
 /**
-å†™å˜è¿æ›¿ä»£éƒ¨åˆ†çš„å‡½æ•°ï¼šæ ¹æ®HSNæ–‡ä»¶çš„æ ¼å¼è¦æ±‚ï¼Œåˆ©ç”¨æ–‡ä»¶æŒ‡é’ˆè¯»å–ç»“æ„ä½“å˜é‡ä¸­çš„å˜è¿æ›¿ä»£çš„æ€»æ•°é‡ï¼šnstï¼Œ
-æ ¹æ®nstçš„æ•°å€¼ï¼Œåˆ©ç”¨å¾ªç¯ï¼Œè¯»å–è¢«æ›¿ä»£å˜è¿çš„ç¼–å·ï¼štnumï¼Œåº“æ‰€æ˜ å°„çš„æ•°é‡ï¼špmnumå’Œå­ç½‘æ¨¡å—ï¼šnameã€‚
-æ ¹æ®pmnumçš„å€¼ï¼Œåˆ©ç”¨å¾ªç¯ï¼Œè¯»å–æ¯å¯¹åº“æ‰€æ˜ å°„ä¸­HSNçš„åº“æ‰€ç¼–å·å’ŒLSNçš„åº“æ‰€ç¼–å·ã€‚å°†ä¸Šè¿°ä¿¡æ¯é€ä¸€å†™å…¥æ–‡ä»¶ä¸­ã€‚
+Ğ´±äÇ¨Ìæ´ú²¿·ÖµÄº¯Êı£º¸ù¾İHSNÎÄ¼şµÄ¸ñÊ½ÒªÇó£¬ÀûÓÃÎÄ¼şÖ¸Õë¶ÁÈ¡½á¹¹Ìå±äÁ¿ÖĞµÄ±äÇ¨Ìæ´úµÄ×ÜÊıÁ¿£ºnst£¬
+¸ù¾İnstµÄÊıÖµ£¬ÀûÓÃÑ­»·£¬¶ÁÈ¡±»Ìæ´ú±äÇ¨µÄ±àºÅ£ºtnum£¬¿âËùÓ³ÉäµÄÊıÁ¿£ºpmnumºÍ×ÓÍøÄ£¿é£ºname¡£
+¸ù¾İpmnumµÄÖµ£¬ÀûÓÃÑ­»·£¬¶ÁÈ¡Ã¿¶Ô¿âËùÓ³ÉäÖĞHSNµÄ¿âËù±àºÅºÍLSNµÄ¿âËù±àºÅ¡£½«ÉÏÊöĞÅÏ¢ÖğÒ»Ğ´ÈëÎÄ¼şÖĞ¡£
 
 The function of writing the transition substitution part: according to the format requirements of
 the HSN file, use the file pointer to read the total number of transition substitutions "nst" in the
-structure variableï¼Œ
+structure variable£¬
 According to the value of nst, use a loop to read the number of the substituted transition: tnum,
 the number mapped by the library: pmnum and the subnet module: name.
 According to the value of pmnum, use a loop to read the place number of the HSN and the place number
@@ -281,21 +276,21 @@ of the LSN in each pair of place mappings. Write the above information into the 
 **/
 int write_ts(struct tspm * tm,FILE *f); //write transitions subsititution of hsn
 
-//å­ç½‘çš„åº“æ‰€æ˜ å°„å‡½æ•°
+//×ÓÍøµÄ¿âËùÓ³Éäº¯Êı
 void sub_pmapping(int i, int a, int *start_p, int *p_total, struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                   int *add_io, int *addi, int *add_cf,int *add_cf_i, int *a_p_total);
-//å­ç½‘çš„å˜è¿æ˜ å°„å‡½æ•°
+//×ÓÍøµÄ±äÇ¨Ó³Éäº¯Êı
 void sub_tmapping(int i, int a, int *start_t, int *t_total, struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                   int *a_t_total);
-//å¤åˆ¶æ¨¡å—åº“æ‰€æ˜ å°„å‡½æ•°
+//¸´ÖÆÄ£¿é¿âËùÓ³Éäº¯Êı
 void copy_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                    int *split,int *sp_in,int *joint,int *jo_in,int *a_p_total,int p_n,int *add_io,int *addo);
-//å¤åˆ¶æ¨¡å—å˜è¿æ˜ å°„å‡½æ•°
+//¸´ÖÆÄ£¿é±äÇ¨Ó³Éäº¯Êı
 void copy_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,struct net_table *nt,int *a_t_total);
-//clean_moveæ¨¡å—åº“æ‰€æ˜ å°„å‡½æ•°
+//clean_moveÄ£¿é¿âËùÓ³Éäº¯Êı
 void cm_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                  int *add_io, int *addo,int *a_p_total, int p_n,int *add_cf, int *add_cf_o,int *cf_num,int *cf_n_in,int *c_m_cf,int *cf_in);
-//clean_moveæ¨¡å—å˜è¿æ˜ å°„å‡½æ•°
+//clean_moveÄ£¿é±äÇ¨Ó³Éäº¯Êı
 void cm_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,struct net_table *nt,int *a_t_total);
 
 int main (int argc,char *argv[]) {
@@ -354,9 +349,9 @@ int create_net_table(struct hsn *h,struct net_table *nt) {
 		strcpy(nt->filename[(nt->file_n)++],h->t[i].name);
 		for(j=0; j<h->t[i].pmnum; j++) {
 			if((h->t[i].pm1[j].hp)>0&&(h->t[i].pm1[j].lp)>0) { //input places :use copy subnet
-				strcpy(nt->filename[(nt->file_n)++],"copy_lsn.txt");
+				strcpy(nt->filename[(nt->file_n)++],"copy.lsn");
 			} else if((h->t[i].pm1[j].hp)>0&&(h->t[i].pm1[j].lp)<0) {
-				strcpy(nt->filename[(nt->file_n)++],"clean_move_lsn.txt"); //output places :use clean_move subnet
+				strcpy(nt->filename[(nt->file_n)++],"clean_move.lsn"); //output places :use clean_move subnet
 			} else { //control flow
 				continue;
 			}
@@ -369,11 +364,7 @@ int create_net_table(struct hsn *h,struct net_table *nt) {
 		exit(-1);
 	}
 
-<<<<<<< HEAD
 	FILE *f3; //½«ËùĞèlsn¶ÁÈëÄÚ´æ
-=======
-	FILE *f3; //å°†æ‰€éœ€lsnè¯»å…¥å†…å­˜ 
->>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	int temp;
 	for(i=1; i<nt->file_n; i++) {
 		f3 = fopen(nt->filename[i], "r" );
@@ -389,7 +380,7 @@ int create_net_table(struct hsn *h,struct net_table *nt) {
 	return 0;
 }
 
-//å­ç½‘åº“æ‰€æ˜ å°„å‡½æ•°
+//×ÓÍø¿âËùÓ³Éäº¯Êı
 void sub_pmapping(int i, int a, int *start_p, int *p_total, struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                   int *add_io, int *addi, int *add_cf,int *add_cf_i, int *a_p_total) {
 	int j,b,c;
@@ -418,7 +409,7 @@ void sub_pmapping(int i, int a, int *start_p, int *p_total, struct mapping_resul
 		mt->pn[*p_total].new_p=*start_p; //number of result places
 		mt->mark[mt->pn[*p_total].new_p-1]=nt->l_nt[a].mu[j];//result marking
 		for(b=0; b<nt->l_nt[a].k; b++) { //result arcs
-			if(abs(nt->l_nt[a].a[b].p)==mt->pn[*p_total].pre_p && nt->l_nt[a].a[b].w!=0) { //p of arc == pre_p, let p of arc =new_p,ä¸å«ä¼˜å…ˆå¼§
+			if(abs(nt->l_nt[a].a[b].p)==mt->pn[*p_total].pre_p && nt->l_nt[a].a[b].w!=0) { //p of arc == pre_p, let p of arc =new_p,²»º¬ÓÅÏÈ»¡
 				if(nt->l_nt[a].a[b].p>0) {
 					mt->new_a[*a_p_total+b].p=mt->pn[*p_total].new_p;
 				} else {
@@ -433,7 +424,7 @@ void sub_pmapping(int i, int a, int *start_p, int *p_total, struct mapping_resul
 	*a_p_total+=nt->l_nt[a].k;
 
 }
-//å­ç½‘å˜è¿æ˜ å°„å‡½æ•°
+//×ÓÍø±äÇ¨Ó³Éäº¯Êı
 void sub_tmapping(int i, int a, int *start_t, int *t_total, struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                   int *a_t_total) {
 	int j,b;
@@ -446,13 +437,13 @@ void sub_tmapping(int i, int a, int *start_t, int *t_total, struct mapping_resul
 			(*start_t)++;
 		}
 		for(b=0; b<nt->l_nt[a].k; b++) { //result arcs
-			//å¼§ä¸­å˜è¿ç¼–å·ä¸ºæ­£æ•°
+			//»¡ÖĞ±äÇ¨±àºÅÎªÕıÊı
 			if(nt->l_nt[a].a[b].t==mt->tn[*t_total].pre_t) { //p of arc == pre_p, let p of arc =new_p
 				mt->new_a[*a_t_total+b].t=mt->tn[*t_total].new_t;
-			} else if(abs(nt->l_nt[a].a[b].t)==mt->tn[*t_total].pre_t) { //ä¼˜å…ˆå¼§ç¬¬äºŒä½
+			} else if(abs(nt->l_nt[a].a[b].t)==mt->tn[*t_total].pre_t) { //ÓÅÏÈ»¡µÚ¶şÎ»
 				mt->new_a[*a_t_total+b].t=-(mt->tn[*t_total].new_t);
-				mt->new_a[*a_t_total+b].w=nt->l_nt[a].a[b].w; //ä¼˜å…ˆå¼§ä¸¤ä½ï¼Œä»»é€‰ä¸€æ¬¡èµ‹å€¼å³å¯
-			} else if(abs(nt->l_nt[a].a[b].p)==mt->tn[*t_total].pre_t && nt->l_nt[a].a[b].w==0) { //ä¼˜å…ˆå¼§ç¬¬ä¸€ä½
+				mt->new_a[*a_t_total+b].w=nt->l_nt[a].a[b].w; //ÓÅÏÈ»¡Á½Î»£¬ÈÎÑ¡Ò»´Î¸³Öµ¼´¿É
+			} else if(abs(nt->l_nt[a].a[b].p)==mt->tn[*t_total].pre_t && nt->l_nt[a].a[b].w==0) { //ÓÅÏÈ»¡µÚÒ»Î»
 				mt->new_a[*a_t_total+b].p=-(mt->tn[*t_total].new_t);
 			}
 		}
@@ -460,7 +451,7 @@ void sub_tmapping(int i, int a, int *start_t, int *t_total, struct mapping_resul
 	}
 	*a_t_total+=nt->l_nt[a].k;
 }
-//å¤åˆ¶æ¨¡å—åº“æ‰€æ˜ å°„å‡½æ•°
+//¸´ÖÆÄ£¿é¿âËùÓ³Éäº¯Êı
 void copy_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                    int *split,int *sp_in,int *joint,int *jo_in,int *a_p_total,int p_n,int *add_io,int *addo) {
 
@@ -524,7 +515,7 @@ void copy_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *
 
 	*a_p_total+=nt->l_nt[a].k; //array+
 }
-//å¤åˆ¶æ¨¡å—å˜è¿æ˜ å°„å‡½æ•°
+//¸´ÖÆÄ£¿é±äÇ¨Ó³Éäº¯Êı
 void copy_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,struct net_table *nt,int *a_t_total) {
 	int j,b;
 	for(j=0; j<nt->l_nt[a].n; j++) {
@@ -541,7 +532,7 @@ void copy_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,str
 	}
 	*a_t_total+=nt->l_nt[a].k;
 }
-//clean_moveæ¨¡å—åº“æ‰€æ˜ å°„å‡½æ•°
+//clean_moveÄ£¿é¿âËùÓ³Éäº¯Êı
 void cm_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *mt,struct net_table *nt,struct hsn *h,
                  int *add_io, int *addo,int *a_p_total, int p_n,int *add_cf, int *add_cf_o,int *cf_num,int *cf_n_in,int *c_m_cf,int *cf_in) {
 
@@ -620,7 +611,7 @@ void cm_pmapping(int i,int a,int *start_p,int *p_total,struct mapping_result *mt
 
 	*a_p_total+=nt->l_nt[a].k; //array+
 }
-//clean_moveæ¨¡å—å˜è¿æ˜ å°„
+//clean_moveÄ£¿é±äÇ¨Ó³Éä
 void cm_tmapping(int a,int *start_t,int *t_total,struct mapping_result *mt,struct net_table *nt,int *a_t_total) {
 
 	int j,b;
@@ -652,7 +643,7 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		memory_a+=(nt->l_nt[i].k);
 	}
 
-	memory_p+=h->l->m; //regular part ; unsubstitute part ä¸éœ€è¦æ›¿æ¢çš„éƒ¨åˆ†
+	memory_p+=h->l->m; //regular part ; unsubstitute part ²»ĞèÒªÌæ»»µÄ²¿·Ö
 	memory_t+=h->l->n;
 	memory_a+=h->l->k;
 
@@ -753,7 +744,7 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 	for(i=0; i<h->nst; i++) {
 		/*********subsititute net**********/
 		/*************places mapping****************/
-		//å­ç½‘çš„åº“æ‰€æ˜ å°„å‡½æ•°
+		//×ÓÍøµÄ¿âËùÓ³Éäº¯Êı
 
 		sub_pmapping(i, a, &start_p, &p_total, mt, nt, h, add_io, &addi, add_cf, &add_cf_i, &a_p_total);
 
@@ -767,17 +758,17 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 			if((h->t[i].pm1[p_n].hp)>0&&(h->t[i].pm1[p_n].lp)>0) { //copy_lsn
 				copy_count++;
 				/*************places mapping****************/
-				//å¤åˆ¶æ¨¡å—åº“æ‰€æ˜ å°„å‡½æ•°
+				//¸´ÖÆÄ£¿é¿âËùÓ³Éäº¯Êı
 				copy_pmapping(i, a, &start_p, &p_total,mt,nt,h,split,&sp_in,joint,&jo_in,&a_p_total,p_n,add_io,&addo);
 				/***********transition mapping******************/
-				//å¤åˆ¶æ¨¡å—å˜è¿æ˜ å°„å‡½æ•°
+				//¸´ÖÆÄ£¿é±äÇ¨Ó³Éäº¯Êı
 				copy_tmapping(a,&start_t,&t_total,mt,nt,&a_t_total);
 				a++;
 			}
 			/*********clean_move_lsn**********/
 			else if((h->t[i].pm1[p_n].hp)>0&&(h->t[i].pm1[p_n].lp)<0) {
 				/**************Add Split and Joint trantition********************/
-				if(copy_count>0) {//æœ‰è¾“å…¥ ï¼Œæ‰©å±•è¾“å‡ºå‰å…ˆè¿åˆ†ç¦»ï¼Œç»“åˆå˜è¿
+				if(copy_count>0) {//ÓĞÊäÈë £¬À©Õ¹Êä³öÇ°ÏÈÁ¬·ÖÀë£¬½áºÏ±äÇ¨
 					mt->tn[t_total].pre_t=0; //number of previous transitons
 					mt->tn[t_total].new_t=start_t;//split transition
 					t_split[t_sp_in++]=t_total;//record the split transition index to connect with control flow places
@@ -796,7 +787,7 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 					mt->tn[t_total].new_t=start_t;//joint transition
 					start_t++;
 					//add joint transition
-					//ä¸æ›¿ä»£å­ç½‘çš„è¾“å…¥æ§åˆ¶åº“æ‰€ç›¸è¿çš„å¸¸è§„å¼§
+					//ÓëÌæ´ú×ÓÍøµÄÊäÈë¿ØÖÆ¿âËùÏàÁ¬µÄ³£¹æ»¡
 					mt->new_a[a_p_total+0].p=mt->pn[add_cf[add_cf_o++]].new_p;
 					mt->new_a[a_t_total+0].t=mt->tn[t_total].new_t;
 					mt->new_a[a_p_total+0].w=1;
@@ -816,10 +807,10 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 					copy_count=0;
 				}
 				/*************places mapping****************/
-				//clean_moveæ¨¡å—åº“æ‰€æ˜ å°„
+				//clean_moveÄ£¿é¿âËùÓ³Éä
 				cm_pmapping(i,a,&start_p, &p_total,mt,nt,h,add_io, &addo,&a_p_total,p_n,add_cf, &add_cf_o,cf_num,&cf_n_in,c_m_cf,&cf_in);
 				/*************transition mapping********************/
-				//clean_moveæ¨¡å—å˜è¿æ˜ å°„
+				//clean_moveÄ£¿é±äÇ¨Ó³Éä
 				cm_tmapping(a,&start_t,&t_total,mt,nt,&a_t_total);
 
 				a++;
@@ -854,24 +845,19 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		}
 
 	}
-<<<<<<< HEAD
 
 	//²»ĞèÒªÌæ´úµÄ±äÇ¨£¬ÓÉHSN´«µİÖÁLSN
-=======
-	
-	//ä¸éœ€è¦æ›¿ä»£çš„å˜è¿ï¼Œç”±HSNä¼ é€’è‡³LSN
->>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i<(h->l->k); i++) {
 		for(j=0; j<(h->nst); j++) {
 			if((h->l->a[i].t)==(h->t[j].tnum)) {
-				break;   //è‹¥å› å¼§çš„å˜è¿ä¸è¢«æ›¿ä»£çš„å˜è¿å·ä¸€è‡´ï¼Œåˆ™è·³å‡ºå¾ªç¯ï¼Œjå§‹ç»ˆå°äºnstï¼Œæœ€å¤§ä¸ºnst-1
+				break;   //ÈôÒò»¡µÄ±äÇ¨Óë±»Ìæ´úµÄ±äÇ¨ºÅÒ»ÖÂ£¬ÔòÌø³öÑ­»·£¬jÊ¼ÖÕĞ¡ÓÚnst£¬×î´óÎªnst-1
 			}
 		}
-		if(j==(h->nst)) { //å³ä¸ºå®Œæˆä¸Šè¿°jå¾ªç¯ï¼Œä¸ºè¿è¡Œbreakï¼›åˆ™j==nst
+		if(j==(h->nst)) { //¼´ÎªÍê³ÉÉÏÊöjÑ­»·£¬ÎªÔËĞĞbreak£»Ôòj==nst
 			//places
-			mt->pn[p_total].pre_p=h->l->a[i].p; //ç›´æ¥åˆ©ç”¨HSNä¸­çš„ç¼–å·
+			mt->pn[p_total].pre_p=h->l->a[i].p; //Ö±½ÓÀûÓÃHSNÖĞµÄ±àºÅ
 			mt->pn[p_total].new_p=h->l->a[i].p;
-			mt->mark[abs(mt->pn[p_total].new_p)-1]=h->l->mu[abs(h->l->a[i].p)-1];//tokenä¸HSNä¸€è‡´
+			mt->mark[abs(mt->pn[p_total].new_p)-1]=h->l->mu[abs(h->l->a[i].p)-1];//tokenÓëHSNÒ»ÖÂ
 			//transitions
 			mt->tn[t_total].pre_t=h->l->a[i].t; //number of previous transitons
 			mt->tn[t_total].new_t=h->l->a[i].t;
@@ -900,15 +886,9 @@ int create_mapping_result(struct mapping_result *mt,struct net_table *nt,struct 
 		printf("***error: no enough memory for mt->l_result->mu\n");
 		exit(-1);
 	}
-<<<<<<< HEAD
 
 	//¼ÇÂ¼·Ç0¿âËù×ÜÊı
 	int noneZero=0;
-=======
-	
-	//è®°å½•é0åº“æ‰€æ€»æ•°
-	int noneZero=0; 
->>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i<start_p-1; i++) {
 		mt->l_result->mu[i]=mt->mark[i];
 		if(mt->mark[i]!=0) {
@@ -996,9 +976,10 @@ int header_check_err(int m, int n, int k) {
 		exit(-1);
 	}
 	if(m == 0 || n == 0 || k == 0) {
-		printf("Wrong header: less than 3 or value zero"); //
+		printf("Wrong header: m n or k, value zero"); //
 		exit(-1);
 	}
+	return 0;
 }
 
 int arc_check_err(int p, int t, int w, int m, int n ,int k) {
@@ -1022,6 +1003,7 @@ int arc_check_err(int p, int t, int w, int m, int n ,int k) {
 		printf("Exceed transition number: %d %d %d, Exceed the number of n",p,t,w);
 		exit(-1);
 	}
+	return 0; 
 }
 //Duplicate arc
 int duplicate_check(int p1,int t1,int p2,int t2) {
@@ -1029,6 +1011,7 @@ int duplicate_check(int p1,int t1,int p2,int t2) {
 		printf("Duplicate arc %d %d w1 and %d %d w2",p1,t1,p2,t2);
 		exit(-1);
 	}
+	return 0;
 }
 //read lsn
 int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
@@ -1057,7 +1040,6 @@ int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
 		printf("***error: no enough memory for l->mu\n");
 		exit(2);
 	}
-<<<<<<< HEAD
 
 	//set all markings zero  ÏÈ½«tokenÈ«ÖÃÎª0
 	for(i=0; i < l->m; i++) {
@@ -1065,15 +1047,6 @@ int read_lsn(struct lsn * l,int *nst, FILE *f) { //read lsn
 	}
 	//set none zero markings  ¸³Öµ·Ç0token
 	int pnum,marking;//·Ç0¿âËùµÄ±àºÅºÍtokenÊı
-=======
-	
-	//set all markings zero  å…ˆå°†tokenå…¨ç½®ä¸º0 
-	for(i=0; i < l->m; i++) {
-		l->mu[i]=0;
-	}
-	//set none zero markings  èµ‹å€¼é0token 
-	int pnum,marking;//é0åº“æ‰€çš„ç¼–å·å’Œtokenæ•° 
->>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i < (l->l); i++) {
 		SKIP_COMM
 		sscanf(input_buffer, "%d %d", &pnum,&marking );
@@ -1098,11 +1071,7 @@ int write_lsn(struct lsn * l, FILE *f) {
 
 
 	fprintf(f,"; mu(p):\n") ;
-<<<<<<< HEAD
 	//·Ç0¿âËù±àºÅ¼°tokenÊı
-=======
-	//é0åº“æ‰€ç¼–å·åŠtokenæ•° 
->>>>>>> a945232523c6b0b7d15a17070ee40040f85b06f5
 	for(i=0; i < l->m; i++) {
 		if(l->mu[i]!=0) {
 			fprintf(f, "%d %d\n", i+1, l->mu[i]);

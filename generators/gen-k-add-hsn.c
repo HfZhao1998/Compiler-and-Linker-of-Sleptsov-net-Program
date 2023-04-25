@@ -8,7 +8,7 @@
 #define rand_term (rand()%10+1)
 
 int main(int argc, char *argv[]) {
-	int k=atoi(argv[1]), t, i, r, off;
+	int k=atoi(argv[1]), t, i, r, off ,sum=0;
 	FILE *f;
 	f = fopen(argv[2], "w" );
 	//header m n k l nst
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 	// arcs
 	fprintf(f,"; arcs:\n");
 	for(t=1; t<=k; t++) {
-		fprintf(f,"%d %d %d\n", t, t, -1); // p->t inh
+		fprintf(f,"%d %d %d\n", t, t, -1); // p->t
 		fprintf(f,"%d %d %d\n", -t, t, 1); // p<-t
 		fprintf(f,"%d %d %d\n", t+1, t, 1); // t<-p
 	}
@@ -39,18 +39,20 @@ int main(int argc, char *argv[]) {
 		fprintf(f,"%d %d\n",t, 1); // mu(p_{2}) mu(p_{k+1})
 
 	r=rand_term;
+	sum+=r;
 	//first param  第一个参数 单独设置 
 	fprintf(f,"%d %d\n",k+2, r); // mu(p_{k+2})
 
 	for(t=k+3; t<=3*k+2; t+=2) {
 		r=rand_term;
+		sum+=r;
 		fprintf(f,"%d %d\n", t, r); // mu(p_{k+3})...mu(p_{3k+2})
 	}
 
 	//transition substitution
 	fprintf(f,"; transition substitution \n");
 	for(t=1; t<=k; t++) {
-		fprintf(f,"%d %d %s\n", t, 5, "add_lsn.txt"); //substitution info
+		fprintf(f,"%d %d %s\n", t, 5, "add.lsn"); //substitution info
 
 		fprintf(f,"%d %d\n", k+2*t,1);
 		fprintf(f,"%d %d\n", k+2*t+1,2);
@@ -59,4 +61,6 @@ int main(int argc, char *argv[]) {
 		fprintf(f,"%d %d\n", -(t+1),-5);
 
 	}
+	
+	fprintf(f,"; The result should be p%d=%d\n",3*k+2,sum);
 }

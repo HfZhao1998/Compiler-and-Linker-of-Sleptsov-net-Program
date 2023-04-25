@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 	int k=atoi(argv[1]), t, i, j, q, r;
 	//生成k维随机矩阵
 	//generate  a k*k matrix
-	int A[k][k],B[k][k];
+	int A[k][k],B[k][k],C[k][k];
 	for(i=0; i<k; i++) {
 		for(j=0; j<k; j++) {
 			r=rand_term;
@@ -177,14 +177,14 @@ int main(int argc, char *argv[]) {
 			for(p=startP,q=0; p<startP+rowm-rown-1; ) {
 				//第一个乘法特殊处理
 				if(p==startP) {
-					fprintf(f,";input places: p%d=%d, p%d=%d\n",p,A[i][q],p+1,B[q][j]);
+					fprintf(f,";input places:A[%d][%d]:p%d=%d, B[%d][%d]:p%d=%d\n",i,q,p,A[i][q],q,j,p+1,B[q][j]);
 					fprintf(f,"%d %d\n", p, A[i][q]);
 					fprintf(f,"%d %d\n", p+1, B[q][j]);
 					res+=A[i][q]*B[q][j];
 					q++;
 					p+=3;
 				} else  {
-					fprintf(f,";input places: p%d=%d, p%d=%d\n",p,A[i][q],p+1,B[q][j]);
+					fprintf(f,";input places:A[%d][%d]:p%d=%d, B[%d][%d]:p%d=%d\n",i,q,p,A[i][q],q,j,p+1,B[q][j]);
 					fprintf(f,"%d %d\n", p, A[i][q]);
 					fprintf(f,"%d %d\n", p+1, B[q][j]);
 					res+=A[i][q]*B[q][j];
@@ -192,7 +192,9 @@ int main(int argc, char *argv[]) {
 					p+=4;
 				}
 			}
-			fprintf(f,"; The result of p%d is %d\n", p-1, res);
+			C[i][j]=res;
+			fprintf(f,";result place:C[%d][%d]:p%d=%d\n",i,j ,p-1, res);
+			fprintf(f,";\n");
 			startP+=rowm;
 		}
 	}
@@ -209,7 +211,7 @@ int main(int argc, char *argv[]) {
 	for(i=1; i<=k*k; i++) {
 		for(p=startP,controlP=conP,t=startT; p<startP+rowm-rown-1; ) {
 			if(p==startP) { //第一个添加一个乘法替代
-				fprintf(f,"%d %d %s\n", t, 5, "mul_lsn.txt"); //substitution info
+				fprintf(f,"%d %d %s\n", t, 5, "mul.lsn"); //substitution info
 				fprintf(f,"%d %d\n", p, 1);
 				fprintf(f,"%d %d\n", p+1, 2);
 				fprintf(f,"%d %d\n", p+2, -4);
@@ -219,7 +221,7 @@ int main(int argc, char *argv[]) {
 				controlP++;
 				t++;
 			} else { //其余添加一个mul，一个add
-				fprintf(f,"%d %d %s\n", t, 5, "mul_lsn.txt"); //substitution info
+				fprintf(f,"%d %d %s\n", t, 5, "mul.lsn"); //substitution info
 				fprintf(f,"%d %d\n", p, 1);
 				fprintf(f,"%d %d\n", p+1, 2);
 				fprintf(f,"%d %d\n", p+2, -4);
@@ -228,7 +230,7 @@ int main(int argc, char *argv[]) {
 				p+=3;
 				controlP++;
 				t++;
-				fprintf(f,"%d %d %s\n", t, 5, "add_lsn.txt"); //substitution info
+				fprintf(f,"%d %d %s\n", t, 5, "add.lsn"); //substitution info
 				fprintf(f,"%d %d\n", p-4, 1);
 				fprintf(f,"%d %d\n", p-1, 2);
 				fprintf(f,"%d %d\n", p, -3);
@@ -243,5 +245,24 @@ int main(int argc, char *argv[]) {
 		conP+=rowm;
 		startT+=rown;
 	}
-
+	fprintf(f,"; input matrix:\n");
+	//A:
+	for(i=0; i<k; i++) {
+		for(j=0; j<k; j++) {
+			fprintf(f,";A[%d][%d]=%d\n", i,j,A[i][j]);
+		}
+	}
+	//B:
+	for(i=0; i<k; i++) {
+		for(j=0; j<k; j++) {
+			fprintf(f,";B[%d][%d]=%d\n", i,j,B[i][j]);
+		}
+	}
+	fprintf(f,"; output matrix:\n");
+	//C:
+	for(i=0; i<k; i++) {
+		for(j=0; j<k; j++) {
+			fprintf(f,";C[%d][%d]=%d\n", i,j,C[i][j]);
+		}
+	}
 }

@@ -1,6 +1,6 @@
 NAME
        LSN_format   - file formats of the LSN (low-level net)
-
+       comments start with ';'
 Grammar:
 
          .lsn              ::= <pl><tr><arc><mu><type><at>*<ptoken>*

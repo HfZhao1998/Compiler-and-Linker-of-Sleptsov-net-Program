@@ -12,7 +12,7 @@ We list references to components in "Compatibility" section.
 
 2) Use `NDRtoSN` to convert `NDR` file of `Tina` into `HSN` or `LSN`. 
 
-3) Use `HSNtoLSN` to compile and link HSN file and mentioned in it `LSN` files into a single `LSN` file.
+3) Use `HSNtoLSN` to compile and link `HSN` file and mentioned in it `LSN` files into a single `LSN` file.
 
 4) Run `LSN` file on `SN-VM` or `SN-VM-GPU`.
 
@@ -33,42 +33,42 @@ Compatibility:
 Command line formats:
 ------------
 
-HSNtoLSN hsn_file.txt result_lsn_file.txt
+`HSNtoLSN` `file_name.hsn` `file_name.lsn`
 
 Basic documents：
 ------------
-HSNtoLSN.c is used to complete the conversion.
+`HSNtoLSN.c` is used to complete the conversion.
 
-Copy.txt and clean_move.txt are functional modules and need to be in the same directory as the HSNtoLSN.c file.
+`copy.lsn`, `clean_move.lsn` and other modules you need should be in the same directory as the `HSNtoLSN.c` file.
 
 File formats:
 ------------
-New version of file format. Two documents indicate how to define HSN.txt and LSN.txt files.
-
-Examples:
-------------
-Modules of new file format.
-
-Pdf and ndr files of models:
-------------
-These files show the model graphically. You can download Tina to load the ndr file.  http://www.laas.fr/tina
-
-And matrix_mul_2by2.ndr, matrix_par_2by2.ndr defines an HSN using label, which can be converted into an HSN file using NDRtoSN. 
+New version of file format. Two documents indicate how to define `HSN` files and `LSN` files.
 
 Generators:
 ------------
 
-Generators used to generate HSN files for testing.
+Generators used to generate `HSN` files for testing.
 
-Command line example:
+Command line examples:
 
-gen-k-add-hsn 10 addHSN10.txt
+gen-k-add-hsn 10 `add_10.hsn`
 
-gen-k-mul-hsn 10 mulHSN10.txt
+gen-k-mul-hsn 10 `mul_10.hsn`
 
-gen-k-matrix-mul-hsn 5 matrixHSN5.txt
+gen-k-matrix-par-hsn 5 `matrix_5.hsn`
 
-gen-k-matrix-par-hsn 5 matrixHSN5.txt
+`NDR` files:
+------------
+These files show the model graphically. You can download Tina to load the ndr file.  http://www.laas.fr/tina
+
+Tests:
+------------
+
+`HSN` files are created by three generators, and you can use `HSNtoLSN.c` to convert them into `LSN` files.
+
+And file `matrix_2by2.ndr` corresponds to file `matrix_2.hsn`, allowing for a more intuitive observation of its structure.
+
 
 References:
 ------------

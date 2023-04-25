@@ -1,6 +1,6 @@
 NAME
        HSN_format   - file formats of the HSN (high-level net)
-
+       comments start with ';'
 Grammar:
 	
       .hsn       ::= <lsn>(<trssub><plsmap>*)*
